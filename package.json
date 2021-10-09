@@ -1,0 +1,26 @@
+{
+  "name": "OneYouTube",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "env-cmd -f ./config/dev.env nodemon src/index.js",
+    "test": "mocha"
+  },
+  "keywords": [],
+  "author": "Andres.Quijano <andres.quijano@pragma.com.co>",
+  "license": "ISC",
+  "devDependencies": {
+    "env-cmd": "^10.1.0",
+    "expect": "^27.2.4",
+    "mocha": "^9.1.2",
+    "nodemon": "^2.0.13",
+    "rewire": "^5.0.0"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^6.0.10",
+    "uuid": "^8.3.2",
+    "validator": "^13.6.0"
+  }
+}
