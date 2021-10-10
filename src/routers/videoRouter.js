@@ -9,7 +9,7 @@ router.post('/video', async (req, res) => {
     try {
         const video = new Video(req.body);
         await video.save();
-        res.status(201).send('Video successfully uploaded');
+        res.status(201).send({video});
     } catch (error) {
         log('Error in post/video:', error.message || error);
         res.status(400).send(error.message);

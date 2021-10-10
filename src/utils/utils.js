@@ -2,11 +2,11 @@ const validator = require('validator');
 
 const CHARACTERS_TO_IGNORE=' .,;:¿?¡!';
 
-const trimArray = (comaSeparatedString) => {
-    let words = comaSeparatedString.split(',');
-    return words.map(word => word.trim().toLowerCase());
+// const trimArray = (comaSeparatedString) => {
+//     let words = comaSeparatedString.split(',');
+//     return words.map(word => word.trim().toLowerCase());
 
-};
+// };
 
 const validateAlphaNumeric = (value, valueName, required, maxSize)=>{
     if(!required && !value){
@@ -22,7 +22,7 @@ const validateAlphaNumeric = (value, valueName, required, maxSize)=>{
     }
 
     if (!validator.isAlphanumeric(value, 'es-ES', { 'ignore': CHARACTERS_TO_IGNORE })) {
-        throw new Error(`${valueName}  contains invalid characters`);
+        throw new Error(`${valueName} contains invalid characters`);
     }
 
     return true;
@@ -33,11 +33,11 @@ const validateRate = (rate)=>{
         throw new Error('Rate is required');
     }
 
-    if(rate!==1 && rate!==-1){
+    if(rate!=1 && rate!=-1){
         throw new Error('Invalid rate');
     }
 
     return true;
 };
 
-module.exports = { trimArray, validateAlphaNumeric, validateRate };
+module.exports = { /*trimArray,*/ validateAlphaNumeric, validateRate };

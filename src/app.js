@@ -8,4 +8,4 @@ const app = express();
 app.use(express.json());
 app.use(videoRouter);
 
-module.exports = { app }
+module.exports = app;

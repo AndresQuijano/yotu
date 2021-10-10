@@ -1,12 +1,14 @@
 const expect = require('expect');
 const rewire = require('rewire');
+const supertest = require('supertest');
 const { log } = console;
+// const app = require('../src/app');
 
-describe('saveVideo() function:', () => {
-    it('success', async () => {
+xdescribe('saveVideo() function:', () => {
+    xit('success', async () => {
         let revert;
         try {
-            let infoSentToDB=[];
+            let infoSentToDB = [];
             const videoSaver = rewire('../src/db/video');
             const videoFromRequest = {
                 "name": "Three",
@@ -36,4 +38,19 @@ describe('saveVideo() function:', () => {
             }
         }
     });
+
+    it('should save a video successfully', async () => {
+        const response = await supertest(app)
+            .post('/video')
+            .send({
+                "name": "Some name video",
+                "description": "Some short and precise desciption",
+                "uploader": "pepe@email.com",
+                "tags": ["tag1", "tag2"],
+                "url": "https://static.filestackapi.com/v3/filestack.js"
+            })
+            .expect(201);
+
+        expect(response.body.video._id).toBeDefined();
+    })
 });
