@@ -11,8 +11,8 @@ router.post('/video', async (req, res) => {
         await video.save();
         res.status(201).send({video});
     } catch (error) {
-        log('Error in post/video:', error.message || error);
-        res.status(400).send(error.message);
+        log('Error in post/video:', error.message);
+        res.status(400).send({'errorMessage':error.message});
     }
 });
 
@@ -25,8 +25,8 @@ router.get('/video/:criteria', async (req, res) => {
         });
         res.status(200).send(videos);
     } catch (error) {
-        log('Error in get/video:', error.message || error);
-        res.status(400).send(error.message);
+        log('Error in get/video:', error.message);
+        res.status(400).send({'errorMessage':error.message});
     }
 });
 

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "env-cmd -f ./config/dev.env nodemon src/index.js",
-    "test": "nyc --reporter=html mocha"
+    "test": "env-cmd -f ./config/test.env nyc --reporter=html mocha"
   },
   "keywords": [],
   "author": "Andres.Quijano <andres.quijano@pragma.com.co>",
