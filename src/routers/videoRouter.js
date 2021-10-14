@@ -7,6 +7,7 @@ const router = new express.Router();
 
 router.post('/video', async (req, res) => {
     try {
+        log('req.body:',req.body);
         const video = new Video(req.body);
         await video.save();
         res.status(201).send({video});
@@ -18,6 +19,7 @@ router.post('/video', async (req, res) => {
 
 router.get('/video/:criteria', async (req, res) => {
     try {
+        log(req.params);
         validateAlphaNumeric(req.params.criteria, 'Search criteria', true, 100);
 
         const videos = await Video.find({

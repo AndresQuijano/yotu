@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "env-cmd -f ./config/dev.env nodemon src/index.js",
+    "dev": "env-cmd -f ./config/dev.env nodemon src/index.js -e js,hbs,html",
     "test": "env-cmd -f ./config/test.env nyc --reporter=html mocha"
   },
   "keywords": [],
