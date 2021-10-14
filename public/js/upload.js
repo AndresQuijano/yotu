@@ -47,19 +47,6 @@ uploadForm.addEventListener('submit', async (e) => {
 
     console.log('data:', data);
 
-    // fetch(uploadURL, {
-    //     method: "POST",
-    //     headers: {
-    //         'Content-Type': 'application/json'
-    //     },
-    //     body: JSON.stringify(data)
-    // }).then(res => {
-    //     // let response = res.json();
-    //     console.log("Request complete! response:", res);
-    // }).then(res=>{
-    //     console.log('res:', res);
-    // });
-
     let res=await fetch(uploadURL, {
         method: "POST",
         headers: {
@@ -70,5 +57,7 @@ uploadForm.addEventListener('submit', async (e) => {
 
     let response = await res.json();
 
-    console.log('data:', response);
+    window.location.href = 'http://localhost:3000/video/'+response.video._id;//`http://localhost:3000/watch/${response.video._id}`;
+
+    console.log('data:', response.video._id);
 });

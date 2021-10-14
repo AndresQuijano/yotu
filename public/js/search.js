@@ -5,7 +5,7 @@ uploadForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const criteria = searchInput.value;
-    const searchURL = `/video/${criteria}`;
+    const searchURL = `/video/search/${criteria}`;
 
     console.log('searchURL:', searchURL);
 
@@ -18,7 +18,7 @@ uploadForm.addEventListener('submit', async (e) => {
     for(const i in response){
         let tr=document.createElement("tr");
 
-        tr.innerHTML=`<td>${response[i].name}</td>`;
+        tr.innerHTML=`<a href="http://localhost:3000/video/${response[i]._id}">${response[i].name}</td>`;
         document.querySelector('table').appendChild(tr);
     }
 });

@@ -1,6 +1,6 @@
 const validator = require('validator');
 
-const CHARACTERS_TO_IGNORE=' .,;:¿?¡!';
+const CHARACTERS_TO_IGNORE=' .,;:¿?¡!\'';
 
 // const trimArray = (comaSeparatedString) => {
 //     let words = comaSeparatedString.split(',');

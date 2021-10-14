@@ -60,14 +60,14 @@ describe('post(/video) route:', () => {
     });
 });
 
-describe('get(/video) route:', () => {
+describe('get(/video/search) route:', () => {
     before(async () => {
         await setupDb.setupDbForTesting();
     });
 
     it('Should find video by name', async () => {
         const response = await supertest(app)
-            .get('/video/one')
+            .get('/video/search/one')
             .expect(200);
 
         expect(response.body[0].name).toBe('one');
@@ -75,7 +75,7 @@ describe('get(/video) route:', () => {
 
     it('Should find video by tag', async () => {
         const response = await supertest(app)
-            .get('/video/second')
+            .get('/video/search/second')
             .expect(200);
 
         expect(response.body[0].tags.includes('second')).toBe(true);
@@ -83,7 +83,7 @@ describe('get(/video) route:', () => {
 
     it('Should find video by description', async () => {
         const response = await supertest(app)
-            .get('/video/fish')
+            .get('/video/search/fish')
             .expect(200);
 
         expect(response.body[0].description).toBe('A bird playing with a fish');
@@ -91,7 +91,7 @@ describe('get(/video) route:', () => {
 
     it('Should find video by uploader', async () => {
         const response = await supertest(app)
-            .get('/video/andres')
+            .get('/video/search/andres')
             .expect(200);
 
         expect(response.body.length).toBe(2);
@@ -99,7 +99,7 @@ describe('get(/video) route:', () => {
 
     it('Should validate special characters in criteria', async () => {
         const response = await supertest(app)
-            .get('/video/fal$eCiter&a')
+            .get('/video/search/fal$eCiter&a')
             .expect(400);
 
         expect(response.body.errorMessage).toBe('Search criteria contains invalid characters');
