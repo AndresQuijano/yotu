@@ -20,7 +20,7 @@ router.post('/video', async (req, res) => {
 
 router.get('/video/search/:criteria', async (req, res) => {
     try {
-        validateAlphaNumeric(req.params.criteria, 'Video id', true, 100);
+        validateAlphaNumeric(req.params.criteria, 'Search criteria', true, 100);
 
         const videos = await Video.find({
             $text: { $search: req.params.criteria }
@@ -38,8 +38,9 @@ router.get('/video/:id', async (req, res) => {
             throw new Error('Invalid video id');
         }
 
-        const _id=req.params.id;
+        const _id = req.params.id;
         const video = await Video.findById({ _id });
+        
         res.render('watch', video);
     } catch (error) {
         log('Error in get/video:', error.message);

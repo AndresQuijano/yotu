@@ -60,7 +60,7 @@ describe('post(/video) route:', () => {
     });
 });
 
-describe('get(/video/search) route:', () => {
+describe('get(/video/:searchCriteria) route:', () => {
     before(async () => {
         await setupDb.setupDbForTesting();
     });
@@ -106,43 +106,64 @@ describe('get(/video/search) route:', () => {
     });
 });
 
+describe('get(/video/:id) route:', () => {
+    before(async () => {
+        await setupDb.setupDbForTesting();
+    });
+
+    it('Should find video by id', async () => {
+        const response = await supertest(app)
+            .get(`/video/${setupDb.videoOneId}`)
+            .expect(200);
+
+        expect(response.text).toContain('src=https://static.filestackapi.com/v3/filestack1.js type="video/mp4"');
+        expect(response.text).toContain('one');
+        expect(response.text).toContain('andres@andres.com');
+        expect(response.text).toContain('First test video');
+    });
+
+    it('Should throw an error if id is invalid', async () => {
+        const response = await supertest(app)
+            .get(`/video/thisisaninvalidid`)
+            .expect(400);
+    });
+});
+
 describe('patch(/video/rate) route:', () => {
     before(async () => {
         await setupDb.setupDbForTesting();
     });
 
     it('Should rate a video (like)', async () => {
-        const video = (await Video.find({'name':'one'}));
-        const id= video[0]._id;
+        const videoBefore = (await Video.findById(setupDb.videoOneId));
 
         await supertest(app)
             .patch('/video/rate')
             .send({
-                "_id": id,
-                "rate": 1
+                '_id': setupDb.videoOneId,
+                'rate': 1
             })
             .expect(200);
 
-        const ratedVideo = await Video.findById(id);
+        const videoAfter = await Video.findById(setupDb.videoOneId);
 
-        expect(ratedVideo.likes).toBe(video[0].likes+1);
+        expect(videoAfter.likes).toBe(videoBefore.likes + 1);
     });
 
     it('Should rate a video (dislike)', async () => {
-        const video = (await Video.find({'name':'one'}));
-        const id= video[0]._id;
+        const videoBefore = (await Video.findById(setupDb.videoOneId));
 
         await supertest(app)
             .patch('/video/rate')
             .send({
-                "_id": id,
+                "_id": setupDb.videoOneId,
                 "rate": '-1'
             })
             .expect(200);
 
-        const ratedVideo = await Video.findById(id);
+        const videoAfter = await Video.findById(setupDb.videoOneId);
 
-        expect(ratedVideo.dislikes).toBe(video[0].dislikes+1);
+        expect(videoAfter.dislikes).toBe(videoBefore.dislikes + 1);
     });
 
     it('Should throw an error when rating an unexisting video', async () => {
@@ -164,3 +185,4 @@ describe('patch(/video/rate) route:', () => {
             .expect(400);
     });
 });
+
