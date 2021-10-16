@@ -1,8 +1,15 @@
-const uploadForm = document.querySelector('form');
-const searchInput = document.querySelector('#inSearch');
+document.addEventListener("DOMContentLoaded",addListeners);
 
-uploadForm.addEventListener('submit', async (e) => {
+function addListeners(){
+    const uploadForm = document.querySelector('form');
+
+    uploadForm.addEventListener('submit', goSearch);
+}
+
+async function goSearch (e) {
     e.preventDefault();
+
+    const searchInput = document.querySelector('#inSearch');
 
     const criteria = searchInput.value;
     const searchURL = `/video/search/${criteria}`;
@@ -13,12 +20,10 @@ uploadForm.addEventListener('submit', async (e) => {
 
     let response = await res.json();
 
-    console.log('data:', response);
-
     for(const i in response){
         let tr=document.createElement("tr");
 
-        tr.innerHTML=`<a href="http://localhost:3000/video/${response[i]._id}">${response[i].name}</td>`;
+        tr.innerHTML=`<a href="/video/${response[i]._id}">${response[i].name}</td>`;
         document.querySelector('table').appendChild(tr);
     }
-});
+}

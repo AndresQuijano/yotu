@@ -2,16 +2,26 @@
 <html>
 
 <head>
+    <script src="/js/watch.js"></script>
 </head>
 
 <body>
     <div>
-        <video width="320" controls>
+        {{>header}}
+    </div>
+    <div>
+        <video width="320" height="320" controls>
             <source src={{url}} type="video/mp4">
-        </video>
+        </video><br>
+        <div>
+            <button id="btnLike">Like</button> <label>{{likes}}</label>
+        </div>
+        <div>
+            <button id="btnDislike">Dislike</button> <label>{{dislikes}}</label>
+        </div>
         <h2>{{name}}</h2>
         <p>{{description}}</p>
-        <p>by{{uploader}}</p>
+        <p>by {{uploader}}</p>
         <p>{{tags}}</p>
     </div>
 </body>
