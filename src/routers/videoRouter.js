@@ -40,7 +40,7 @@ router.get('/video/:id', async (req, res) => {
 
         const _id = req.params.id;
         const video = await Video.findById({ _id });
-        
+
         res.render('watch', video);
     } catch (error) {
         log('Error in get/video:', error.message);
@@ -50,7 +50,7 @@ router.get('/video/:id', async (req, res) => {
 
 router.patch('/video/rate', async (req, res) => {
     try {
-        validateRate(req.body.rate);
+        validateRate(req.body);
 
         const video = await Video.findOne({ '_id': req.body._id });
 
@@ -58,10 +58,11 @@ router.patch('/video/rate', async (req, res) => {
             return res.status(404).send('Video not found');
         }
 
-        if (req.body.rate === 1) {
-            video.likes += 1;
-        } else {
-            video.dislikes += 1;
+        if (req.body.like) {
+            video.likes = parseInt(video.likes) + parseInt(req.body.like);
+        }
+        if (req.body.dislike) {
+            video.dislikes = parseInt(video.dislikes) + parseInt(req.body.dislike);
         }
 
         video.save();

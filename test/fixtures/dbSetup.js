@@ -12,7 +12,9 @@ const setupDbForTesting = async () => {
         "description":"First test video",
         "uploader": "andres@andres.com",
         "tags": ["uno", "primero", "first"],
-        "url": "https://static.filestackapi.com/v3/filestack1.js"
+        "url": "https://static.filestackapi.com/v3/filestack1.js",
+        "likes":10,
+        "dislikes":10
     });
     await video.save();
 

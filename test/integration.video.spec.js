@@ -1,7 +1,5 @@
 const expect = require('expect');
-const rewire = require('rewire');
 const supertest = require('supertest');
-const { log } = console;
 const app = require('../src/app');
 const Video = require('../src/models/videoModel');
 const setupDb = require('./fixtures/dbSetup');
@@ -15,11 +13,11 @@ describe('post(/video) route:', () => {
         const response = await supertest(app)
             .post('/video')
             .send({
-                "name": "Some name video",
-                "description": "Some short and precise desciption",
-                "uploader": "pepe@email.com",
-                "tags": ["tag1", "tag2", "", ""],
-                "url": "https://static.filestackapi.com/v3/filestack4.js"
+                'name': 'Some name video',
+                'description': 'Some short and precise desciption',
+                'uploader': 'pepe@email.com',
+                'tags': ['tag1', 'tag2', '', ''],
+                'url': 'https://static.filestackapi.com/v3/filestack4.js'
             })
             .expect(201);
 
@@ -29,30 +27,30 @@ describe('post(/video) route:', () => {
         expect(savedVideo.tags.length).toBe(2);
     });
 
-    it("Shouldn't save video if validation fails (email)", async () => {
+    it('Should throw an error if validation fails (email)', async () => {
         const response = await supertest(app)
             .post('/video')
             .send({
-                "name": "Some name",
-                "description": "Some short and precise desciption",
-                "uploader": "pepe-email.com",
-                "tags": ["tag1", "tag2"],
-                "url": "https://static.filestackapi.com/v3/filestack.js"
+                'name': 'Some name',
+                'description': 'Some short and precise desciption',
+                'uploader': 'pepe-email.com',
+                'tags': ['tag1', 'tag2'],
+                'url': 'https://static.filestackapi.com/v3/filestack.js'
             })
             .expect(400);
 
         expect(response.body.errorMessage).toBe('Video validation failed: uploader: Email is invalid');
     });
 
-    it("Shouldn't save video if validation fails (URL)", async () => {
+    it('Should throw an error if validation fails (URL)', async () => {
         const response = await supertest(app)
             .post('/video')
             .send({
-                "name": "Name",
-                "description": "Some short and precise desciption",
-                "uploader": "pepe@email.com",
-                "tags": ["tag1", "tag2"],
-                "url": "httpsstaticfilestackapicomv3filestackjs"
+                'name': 'Name',
+                'description': 'Some short and precise desciption',
+                'uploader': 'pepe@email.com',
+                'tags': ['tag1', 'tag2'],
+                'url': 'httpsstaticfilestackapicomv3filestackjs'
             })
             .expect(400);
 
@@ -116,7 +114,7 @@ describe('get(/video/:id) route:', () => {
             .get(`/video/${setupDb.videoOneId}`)
             .expect(200);
 
-        expect(response.text).toContain('src=https://static.filestackapi.com/v3/filestack1.js type="video/mp4"');
+        expect(response.text).toContain('src="https://static.filestackapi.com/v3/filestack1.js" type="video/mp4"');
         expect(response.text).toContain('one');
         expect(response.text).toContain('andres@andres.com');
         expect(response.text).toContain('First test video');
@@ -141,7 +139,7 @@ describe('patch(/video/rate) route:', () => {
             .patch('/video/rate')
             .send({
                 '_id': setupDb.videoOneId,
-                'rate': 1
+                'like': 1
             })
             .expect(200);
 
@@ -156,8 +154,8 @@ describe('patch(/video/rate) route:', () => {
         await supertest(app)
             .patch('/video/rate')
             .send({
-                "_id": setupDb.videoOneId,
-                "rate": '-1'
+                '_id': setupDb.videoOneId,
+                'dislike': '1'
             })
             .expect(200);
 
@@ -166,21 +164,55 @@ describe('patch(/video/rate) route:', () => {
         expect(videoAfter.dislikes).toBe(videoBefore.dislikes + 1);
     });
 
+    it('Should rollback a dislike (dislike)', async () => {
+        const videoBefore = (await Video.findById(setupDb.videoOneId));
+
+        await supertest(app)
+            .patch('/video/rate')
+            .send({
+                '_id': setupDb.videoOneId,
+                'dislike': '-1'
+            })
+            .expect(200);
+
+        const videoAfter = await Video.findById(setupDb.videoOneId);
+
+        expect(videoAfter.dislikes).toBe(videoBefore.dislikes - 1);
+    });
+
+    it('Should rollback a like and add a dislike all at once', async () => {
+        const videoBefore = (await Video.findById(setupDb.videoOneId));
+
+        await supertest(app)
+            .patch('/video/rate')
+            .send({
+                '_id': setupDb.videoOneId,
+                'like':1,
+                'dislike': '-1'
+            })
+            .expect(200);
+
+        const videoAfter = await Video.findById(setupDb.videoOneId);
+
+        expect(videoAfter.dislikes).toBe(videoBefore.dislikes - 1);
+        expect(videoAfter.likes).toBe(videoBefore.likes + 1);
+    });
+
     it('Should throw an error when rating an unexisting video', async () => {
         await supertest(app)
             .patch('/video/rate')
             .send({
-                "_id": "613e391f43975ebc0526f354",
-                "rate": '-1'
+                '_id': '613e391f43975ebc0526f354',
+                'like': '-1'
             })
             .expect(404);
     });
 
-    it('Should throw an error when rate is not sent', async () => {
+    it('Should throw an error when like/dislike are not sent', async () => {
         await supertest(app)
             .patch('/video/rate')
             .send({
-                "_id": "613e391f43975ebc0526f354"
+                '_id': '613e391f43975ebc0526f354'
             })
             .expect(400);
     });

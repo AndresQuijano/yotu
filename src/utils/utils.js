@@ -1,6 +1,6 @@
 const validator = require('validator');
 
-const CHARACTERS_TO_IGNORE=' .,;:¿?¡!\'';
+const CHARACTERS_TO_IGNORE = ' .,;:¿?¡!\'';
 
 // const trimArray = (comaSeparatedString) => {
 //     let words = comaSeparatedString.split(',');
@@ -8,8 +8,8 @@ const CHARACTERS_TO_IGNORE=' .,;:¿?¡!\'';
 
 // };
 
-const validateAlphaNumeric = (value, valueName, required, maxSize)=>{
-    if(!required && !value){
+const validateAlphaNumeric = (value, valueName, required, maxSize) => {
+    if (!required && !value) {
         return true;
     }
 
@@ -28,13 +28,25 @@ const validateAlphaNumeric = (value, valueName, required, maxSize)=>{
     return true;
 }
 
-const validateRate = (rate)=>{
-    if(!rate){
-        throw new Error('Rate is required');
+const validateRate = (rate) => {
+    if (!rate) {
+        throw new Error('400. Bad request');
     }
 
-    if(rate!=1 && rate!=-1){
-        throw new Error('Invalid rate');
+    if (!validator.isMongoId(rate._id)) {
+        throw new Error('400. Bad request');
+    }
+
+    if (!rate.like && !rate.dislike) {
+        throw new Error('400. Bad request');
+    }
+
+    const likeValue = rate.like ? rate.like : 0;
+    const dislikeValue = rate.dislike ? rate.dislike : 0;
+
+    if ((Math.abs(likeValue) > 1) || (Math.abs(dislikeValue) > 1)
+        || (likeValue === dislikeValue)) {
+        throw new Error('400. Bad request');
     }
 
     return true;

@@ -70,9 +70,13 @@ describe('Function validateAlphaNumeric', () => {
 });
 
 describe('Function validateRate', () => {
-    it('Should pass with 1', () => {
+    it('Should pass with 1 and undefined', () => {
         try {
-            const result = validateRate(1)
+            const rate = {
+                '_id': '616792a23ace9f7c77ecce44',
+                'like': '1'
+            };
+            const result = validateRate(rate)
             expect(result).toBe(true);
         } catch (error) {
             log('Error in test:', error);
@@ -80,9 +84,13 @@ describe('Function validateRate', () => {
         }
     });
 
-    it('Should pass with -1', () => {
+    it('Should pass with undefined and -1', () => {
         try {
-            const result = validateRate(-1)
+            const rate = {
+                '_id': '616792a23ace9f7c77ecce44',
+                'dislike': '-1'
+            };
+            const result = validateRate(rate)
             expect(result).toBe(true);
         } catch (error) {
             log('Error in test:', error);
@@ -90,10 +98,59 @@ describe('Function validateRate', () => {
         }
     });
 
-
-    it("Should pass with '-1'", () => {
+    it('Should pass with 1 and -1', () => {
         try {
-            const result = validateRate('-1')
+            const rate = {
+                '_id': '616792a23ace9f7c77ecce44',
+                'like': '1',
+                'dislike': '-1'
+            };
+            const result = validateRate(rate)
+            expect(result).toBe(true);
+        } catch (error) {
+            log('Error in test:', error);
+            throw error;
+        }
+    });
+
+    it('Should pass with -1 and 1', () => {
+        try {
+            const rate = {
+                '_id': '616792a23ace9f7c77ecce44',
+                'like': '-1',
+                'dislike': '1'
+            };
+            const result = validateRate(rate)
+            expect(result).toBe(true);
+        } catch (error) {
+            log('Error in test:', error);
+            throw error;
+        }
+    });
+
+    it('Should pass with 1 and 0', () => {
+        try {
+            const rate = {
+                '_id': '616792a23ace9f7c77ecce44',
+                'like': '1',
+                'dislike': '0'
+            };
+            const result = validateRate(rate)
+            expect(result).toBe(true);
+        } catch (error) {
+            log('Error in test:', error);
+            throw error;
+        }
+    });
+
+    it('Should pass with 0 and -1', () => {
+        try {
+            const rate = {
+                '_id': '616792a23ace9f7c77ecce44',
+                'like': '0',
+                'dislike': '-1'
+            };
+            const result = validateRate(rate)
             expect(result).toBe(true);
         } catch (error) {
             log('Error in test:', error);
@@ -104,7 +161,7 @@ describe('Function validateRate', () => {
     it('Should fail with undefined', () => {
         try {
             expect(() => validateRate())
-                .toThrow('Rate is required');
+                .toThrow('400. Bad request');
 
         } catch (error) {
             log('Error in test:', error);
@@ -112,10 +169,103 @@ describe('Function validateRate', () => {
         }
     });
 
-    it('Should fail with 2', () => {
+    it('Should fail with invalid _id', () => {
         try {
-            expect(() => validateRate(2))
-                .toThrow('Invalid rate');
+            const rate = {
+                '_id': 'invalidmongoid'
+            };
+            expect(() => validateRate(rate))
+                .toThrow('400. Bad request');
+
+        } catch (error) {
+            log('Error in test:', error);
+            throw error;
+        }
+    });
+
+    it('Should fail if like/dislike when like/dislike are undefined', () => {
+        try {
+            const rate = {
+                '_id': '616792a23ace9f7c77ecce44'
+            };
+            expect(() => validateRate(rate))
+                .toThrow('400. Bad request');
+
+        } catch (error) {
+            log('Error in test:', error);
+            throw error;
+        }
+    });
+
+    it('Should fail with 0 and undefined', () => {
+        try {
+            const rate = {
+                '_id': '616792a23ace9f7c77ecce44',
+                'like': 0
+            };
+            expect(() => validateRate(rate))
+                .toThrow('400. Bad request');
+
+        } catch (error) {
+            log('Error in test:', error);
+            throw error;
+        }
+    });
+
+    it('Should fail with undefined and 0', () => {
+        try {
+            const rate = {
+                '_id': '616792a23ace9f7c77ecce44',
+                'dislike': 0
+            };
+            expect(() => validateRate(rate))
+                .toThrow('400. Bad request');
+
+        } catch (error) {
+            log('Error in test:', error);
+            throw error;
+        }
+    });
+
+    it('Should fail with 2 and undefined', () => {
+        try {
+            const rate = {
+                '_id': '616792a23ace9f7c77ecce44',
+                'like': 2
+            };
+            expect(() => validateRate(rate))
+                .toThrow('400. Bad request');
+
+        } catch (error) {
+            log('Error in test:', error);
+            throw error;
+        }
+    });
+
+    it('Should fail with undefined and -3', () => {
+        try {
+            const rate = {
+                '_id': '616792a23ace9f7c77ecce44',
+                'dislike': -3
+            };
+            expect(() => validateRate(rate))
+                .toThrow('400. Bad request');
+
+        } catch (error) {
+            log('Error in test:', error);
+            throw error;
+        }
+    });
+
+    it('Should fail with 1 and 1', () => {
+        try {
+            const rate = {
+                '_id': '616792a23ace9f7c77ecce44',
+                'like': 1,
+                'dislike': 1
+            };
+            expect(() => validateRate(rate))
+                .toThrow('400. Bad request');
 
         } catch (error) {
             log('Error in test:', error);
