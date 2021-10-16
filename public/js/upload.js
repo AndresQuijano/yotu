@@ -1,33 +1,22 @@
-const uploadForm = document.querySelector('form');
-const nameInput = document.querySelector('#inName');
-const descriptionInput = document.querySelector('#inDescription');
-const uploaderInput = document.querySelector('#inUploader');
-const tagsInput = document.querySelector('#inTags');
+let uploadForm;
 let fileInfo;
+let fileStackClient;
 
+document.addEventListener("DOMContentLoaded", addListeners);
 
-let client = filestack.init("A0hd8LTqJQEeo18q8R2Q5z");
-function pickVideo() {
-    client.pick({
-        //Only accepting files with a mimetype 'image/*'
-        //accept: 'video/*',
-        //Only accepting at most 1 file
-        maxFiles: 1,
-        fromSources: ["local_file_system"],
-    }).then(function (result) {//Taking the results object in as 'result'
-        fileInfo = result;
-        console.log(fileInfo);
-    });
+function addListeners() {
+    document.querySelector('form').addEventListener('submit', submitForm);
+
+    fileStackClient = filestack.init("A0hd8LTqJQEeo18q8R2Q5z");
 }
 
-function trimArray(comaSeparatedString) {
-    let words = comaSeparatedString.split(',');
-    return words.map(word => word.trim().toLowerCase());
-
-};
-
-uploadForm.addEventListener('submit', async (e) => {
+async function submitForm(e) {
     e.preventDefault();
+
+    const nameInput = document.querySelector('#inName');
+    const descriptionInput = document.querySelector('#inDescription');
+    const uploaderInput = document.querySelector('#inUploader');
+    const tagsInput = document.querySelector('#inTags');
 
     const uploadURL = '/video';
 
@@ -35,7 +24,6 @@ uploadForm.addEventListener('submit', async (e) => {
     const description = descriptionInput.value;
     const uploader = uploaderInput.value;
     const tags = trimArray(tagsInput.value);
-
 
     const data = {
         name,
@@ -45,9 +33,7 @@ uploadForm.addEventListener('submit', async (e) => {
         'url': fileInfo.filesUploaded[0].url
     };
 
-    console.log('data:', data);
-
-    let res=await fetch(uploadURL, {
+    let res = await fetch(uploadURL, {
         method: "POST",
         headers: {
             'Content-Type': 'application/json'
@@ -57,7 +43,20 @@ uploadForm.addEventListener('submit', async (e) => {
 
     let response = await res.json();
 
-    window.location.href = 'http://localhost:3000/video/'+response.video._id;//`http://localhost:3000/watch/${response.video._id}`;
+    window.location.href = 'http://localhost:3000/video/' + response.video._id;
+}
 
-    console.log('data:', response.video._id);
-});
+function trimArray(comaSeparatedString) {
+    let words = comaSeparatedString.split(',');
+    return words.map(word => word.trim().toLowerCase());
+}
+
+function pickVideo() {
+    fileStackClient.pick({
+        accept: 'video/mp4',
+        maxFiles: 1,
+        fromSources: ["local_file_system"],
+    }).then(function (result) {
+        fileInfo = result;
+    });
+}

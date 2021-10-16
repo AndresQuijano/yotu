@@ -2,7 +2,8 @@
 <html>
 
 <head>
-    <script type="text/javascript" src="https://static.filestackapi.com/v3/filestack.js"></script>
+    <script src="https://static.filestackapi.com/v3/filestack.js"></script>
+    <script src="/js/upload.js"></script>
 </head>
 
 <body>
@@ -10,13 +11,12 @@
         {{>header}}
     </div>
     <form>
-        <input type="text" id="inName" name="inName" placeholder="Video name" /><br>
+        <input type="text" id="inName" name="inName" placeholder="Video name" required/><br>
         <input type="text" id="inDescription" name="inDescription" placeholder="Video description" /><br>
-        <input type="text" id="inUploader" name="inUploader" placeholder="Your email" /><br>
+        <input type="text" id="inUploader" name="inUploader" placeholder="Your email" required/><br>
         <input type="text" id="inTags" name="inTags" placeholder="Tags (separated by coma)" /><br>
-        <!-- Button calls function 'pickMark()' onclick now -->
         <input type="BUTTON" value="Select video" id="filestack" onclick="pickVideo()"><br>
-        <script src="../js/upload.js">    </script>
+        
         <button>Upload</button>
     </form>
 </body>
