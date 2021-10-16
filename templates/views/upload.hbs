@@ -11,10 +11,15 @@
         {{>header}}
     </div>
     <form>
+        <label for="inName">Video name:</label>
         <input type="text" id="inName" name="inName" placeholder="Video name" required value=""/><br>
+        <label for="inDescription">Description:</label>
         <input type="text" id="inDescription" name="inDescription" placeholder="Video description"  value=""/><br>
-        <input type="text" id="inUploader" name="inUploader" placeholder="Your email" required value=""/><br>
+        <label for="inUploader">Your email:</label>
+        <input type="email" id="inUploader" name="inUploader" placeholder="email@example.com" required value=""/><br>
+        <label for="inTags">Tags:</label>
         <input type="text" id="inTags" name="inTags" placeholder="Tags (separated by coma)" value="" /><br>
+        <label for=""></label>
         <input type="BUTTON" value="Select video" id="filestack" onclick="pickVideo()" value=""><br>
         
         <button>Upload</button>
