@@ -2,12 +2,6 @@ const validator = require('validator');
 
 const CHARACTERS_TO_IGNORE = ' .,;:¿?¡!\'';
 
-// const trimArray = (comaSeparatedString) => {
-//     let words = comaSeparatedString.split(',');
-//     return words.map(word => word.trim().toLowerCase());
-
-// };
-
 const validateAlphaNumeric = (value, valueName, required, maxSize) => {
     if (!required && !value) {
         return true;
@@ -52,4 +46,4 @@ const validateRate = (rate) => {
     return true;
 };
 
-module.exports = { /*trimArray,*/ validateAlphaNumeric, validateRate };
+module.exports = { validateAlphaNumeric, validateRate };

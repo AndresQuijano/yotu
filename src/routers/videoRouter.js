@@ -8,13 +8,12 @@ const router = new express.Router();
 
 router.post('/video', async (req, res) => {
     try {
-        log('req.body:', req.body);
         const video = new Video(req.body);
         await video.save();
         res.status(201).send({ video });
     } catch (error) {
         log('Error in post/video:', error.message);
-        res.status(400).send({ 'errorMessage': error.message });
+        res.status(400).send();
     }
 });
 
@@ -28,14 +27,14 @@ router.get('/video/search/:criteria', async (req, res) => {
         res.status(200).send(videos);
     } catch (error) {
         log('Error in get/video:', error.message);
-        res.status(400).send({ 'errorMessage': error.message });
+        res.status(400).send();
     }
 });
 
 router.get('/video/:id', async (req, res) => {
     try {
         if (!validator.isMongoId(req.params.id)) {
-            throw new Error('Invalid video id');
+            return res.status(400).send();
         }
 
         const _id = req.params.id;
@@ -44,7 +43,7 @@ router.get('/video/:id', async (req, res) => {
         res.render('watch', video);
     } catch (error) {
         log('Error in get/video:', error.message);
-        res.status(400).send({ 'errorMessage': error.message });
+        res.status(400).send();
     }
 });
 
@@ -70,7 +69,7 @@ router.patch('/video/rate', async (req, res) => {
         res.status(200).send('Video successfully rated.');
     } catch (error) {
         log('Error in patch/video/rate');
-        res.status(400).send(error.message);
+        res.status(400).send();
     }
 });
 

@@ -5,9 +5,9 @@ const CLASS_BUTTON_UNSELECTED = 'btnUnselected';
 let btnLike;
 let btnDislike;
 
-document.addEventListener("DOMContentLoaded", addListeners);
+document.addEventListener('DOMContentLoaded', initComponents);
 
-function addListeners() {
+function initComponents() {
     btnLike = document.querySelector(`#${BUTTON_LIKE_ID}`);
     btnDislike = document.querySelector(`#${BUTTON_DISLIKE_ID}`);
 
@@ -18,13 +18,13 @@ function addListeners() {
 async function rate(e) {
     e.preventDefault();
 
-    let [likeValue, dislikeValue] = getLikeDislikeValues(e);
+    let [likeValue, dislikeValue] = getLikeAndDislikeValues(e);
 
     const rateURL = '/video/rate';
     const _id = getVideoId();
 
     await fetch(rateURL, {
-        method: "PATCH",
+        method: 'PATCH',
         headers: {
             'Content-Type': 'application/json'
         },
@@ -35,36 +35,35 @@ async function rate(e) {
         })
     });
 
-    fixRateBoard(e, likeValue, dislikeValue);
+    updateRateBoard(e, likeValue, dislikeValue);
 }
 
-function getLikeDislikeValues(e) {
+/**
+ * @function getLikeAndDislikeValues
+ * @param {Event} e 
+ * @returns The values 0, 1 or -1  depending on the state of the like/dislike buttons.
+ */
+function getLikeAndDislikeValues(e) {
     let likeValue = 0;
     let dislikeValue = 0;
 
     if (e.target.id === BUTTON_LIKE_ID) {
-        btnPrimary = btnLike;
-        btnSecondary = btnDislike;
-
-        if (btnPrimary.classList.contains(CLASS_BUTTON_SELECTED)) {
+        if (btnLike.classList.contains(CLASS_BUTTON_SELECTED)) {
             likeValue = -1;
         } else {
             likeValue = 1;
 
-            if (btnSecondary.classList.contains(CLASS_BUTTON_SELECTED)) {
+            if (btnDislike.classList.contains(CLASS_BUTTON_SELECTED)) {
                 dislikeValue = -1;
             }
         }
     } else if (e.target.id === BUTTON_DISLIKE_ID) {
-        btnPrimary = btnDislike;
-        btnSecondary = btnLike;
-
-        if (btnPrimary.classList.contains(CLASS_BUTTON_SELECTED)) {
+        if (btnDislike.classList.contains(CLASS_BUTTON_SELECTED)) {
             dislikeValue = -1;
         } else {
             dislikeValue = 1;
 
-            if (btnSecondary.classList.contains(CLASS_BUTTON_SELECTED)) {
+            if (btnLike.classList.contains(CLASS_BUTTON_SELECTED)) {
                 likeValue = -1;
             }
         }
@@ -78,7 +77,15 @@ function getVideoId() {
     return actualURL.split('/').at(-1);
 }
 
-function fixRateBoard(e, likeValue, dislikeValue) {
+/**
+ * @function updateRateBoard
+ * @description Update the state of the like/dislike buttons and the like/dislike
+ * counters.
+ * @param {Event} e 
+ * @param {number} likeValue 
+ * @param {number} dislikeValue 
+ */
+function updateRateBoard(e, likeValue, dislikeValue) {
     if (e.target.id === BUTTON_LIKE_ID) {
         btnLike.classList.toggle(CLASS_BUTTON_UNSELECTED);
         btnLike.classList.toggle(CLASS_BUTTON_SELECTED);

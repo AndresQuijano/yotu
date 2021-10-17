@@ -1,7 +1,6 @@
 const path = require('path');
 const express = require('express');
 const hbs = require('hbs');
-const { log } = console;
 require('./db/mongooseConnection');
 const { router: videoRouter } = require('./routers/videoRouter');
 const { router: generalRouter } = require('./routers/generalRouter');
@@ -22,6 +21,5 @@ app.use(express.static(publicDirectoryPath));
 app.use(express.json());
 app.use(videoRouter);
 app.use(generalRouter);
-
 
 module.exports = app;

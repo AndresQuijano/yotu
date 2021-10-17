@@ -38,8 +38,6 @@ describe('post(/video) route:', () => {
                 'url': 'https://static.filestackapi.com/v3/filestack.js'
             })
             .expect(400);
-
-        expect(response.body.errorMessage).toBe('Video validation failed: uploader: Email is invalid');
     });
 
     it('Should throw an error if validation fails (URL)', async () => {
@@ -53,8 +51,6 @@ describe('post(/video) route:', () => {
                 'url': 'httpsstaticfilestackapicomv3filestackjs'
             })
             .expect(400);
-
-        expect(response.body.errorMessage).toBe('Video validation failed: url: URL is invalid');
     });
 });
 
@@ -99,8 +95,6 @@ describe('get(/video/:searchCriteria) route:', () => {
         const response = await supertest(app)
             .get('/video/search/fal$eCiter&a')
             .expect(400);
-
-        expect(response.body.errorMessage).toBe('Search criteria contains invalid characters');
     });
 });
 

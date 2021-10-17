@@ -2,12 +2,12 @@ let uploadForm;
 let fileInfo;
 let fileStackClient;
 
-document.addEventListener("DOMContentLoaded", addListeners);
+document.addEventListener('DOMContentLoaded', initComponents);
 
-function addListeners() {
+function initComponents() {
     document.querySelector('form').addEventListener('submit', submitForm);
 
-    fileStackClient = filestack.init("A0hd8LTqJQEeo18q8R2Q5z");
+    fileStackClient = filestack.init('A0hd8LTqJQEeo18q8R2Q5z');
 }
 
 async function submitForm(e) {
@@ -34,7 +34,7 @@ async function submitForm(e) {
     };
 
     let res = await fetch(uploadURL, {
-        method: "POST",
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
@@ -43,9 +43,14 @@ async function submitForm(e) {
 
     let response = await res.json();
 
-    window.location.href = 'http://localhost:3000/video/' + response.video._id;
+    window.location.href = '/video/' + response.video._id;
 }
 
+/**
+ * @function trimArray
+ * @param {String} comaSeparatedString 
+ * @returns An array representation of the words contained in the String sent as parameter
+ */
 function trimArray(comaSeparatedString) {
     let words = comaSeparatedString.split(',');
     return words.map(word => word.trim().toLowerCase());
@@ -55,7 +60,7 @@ function pickVideo() {
     fileStackClient.pick({
         accept: 'video/mp4',
         maxFiles: 1,
-        fromSources: ["local_file_system"],
+        fromSources: ['local_file_system'],
     }).then(function (result) {
         fileInfo = result;
     });

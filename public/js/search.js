@@ -1,6 +1,6 @@
-document.addEventListener("DOMContentLoaded", addListeners);
+document.addEventListener("DOMContentLoaded", initComponents);
 
-function addListeners() {
+function initComponents() {
     const uploadForm = document.querySelector('form');
     uploadForm.reset();
 
@@ -14,17 +14,17 @@ async function goSearch(e) {
     resultTable.innerHTML = '';
 
     const searchInput = document.querySelector('#inSearch');
-
     const criteria = searchInput.value;
+
     const searchURL = `/video/search/${criteria}`;
 
-    let res = await fetch(searchURL);
+    let response = await fetch(searchURL);
 
-    let response = await res.json();
+    response = await response.json();
 
     if (response.length === 0) {
         let tr = document.createElement("tr");
-        tr.innerHTML = `<p>Nothing to show. Try a different search criteria.</p>`;
+        tr.innerHTML = `<p>Nothing to show. Try a different search.</p>`;
         resultTable.appendChild(tr);
         searchInput.value = '';
         searchInput.focus();
@@ -32,9 +32,16 @@ async function goSearch(e) {
     }
 
     for (const i in response) {
-        let tr = document.createElement("tr");
+        let tr = document.createElement('tr');
 
-        tr.innerHTML = `<a href="/video/${response[i]._id}">${response[i].name}</a>`;
+        let td=document.createElement('td');
+        td.innerHTML = `<a href="/video/${response[i]._id}">${response[i].name}</a>`;
+        tr.appendChild(td);
+
+        td=document.createElement('td');
+        td.innerHTML = `<p>${response[i].description}</p>`;
+        tr.appendChild(td);
+
         resultTable.appendChild(tr);
     }
 }
