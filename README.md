@@ -1,5 +1,7 @@
 # NodeJS Bootcamp final project
 
+This is the final project of the NodeJS bootcamp. The goal is to build a youtube-like system. The project can be found at https://yotu-quijano.herokuapp.com/. There are already some videos uploaded and can be found using the searcher with the "car" word as criteria search.
+
 ## How to run the app locally
 
 1. Run MongoDB locally. 
