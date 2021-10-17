@@ -117,7 +117,17 @@ describe('get(/video/:id) route:', () => {
     it('Should throw an error if id is invalid', async () => {
         const response = await supertest(app)
             .get(`/video/thisisaninvalidid`)
-            .expect(400);
+            .expect(200);
+        
+        expect(response.text).toContain('Video not found');
+    });
+
+    it('Should throw an error if video does not exists', async () => {
+        const response = await supertest(app)
+            .get(`/video/716792a23ace9f7c77ecce44`)
+            .expect(200);
+
+        expect(response.text).toContain('Video not found');
     });
 });
 

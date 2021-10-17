@@ -34,11 +34,19 @@ router.get('/video/search/:criteria', async (req, res) => {
 router.get('/video/:id', async (req, res) => {
     try {
         if (!validator.isMongoId(req.params.id)) {
-            return res.status(400).send();
+            return res.render('404', {
+                'title':'Video not found'
+            });
         }
 
         const _id = req.params.id;
         const video = await Video.findById({ _id });
+
+        if(!video){
+            return res.render('404', {
+                'title':'Video not found'
+            });
+        }
 
         res.render('watch', video);
     } catch (error) {
